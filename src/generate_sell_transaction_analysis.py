@@ -9,7 +9,6 @@ Uses FIFO (First In, First Out) accounting method to calculate:
 
 Output can be saved as either Excel or Markdown format.
 """
-
 import argparse
 import json
 from collections import deque
@@ -125,7 +124,6 @@ def analyze_sell_transactions(portfolio_data):
     
     return sell_analysis_results
 
-
 def get_current_prices(symbols):
     """Get current prices for symbols using yfinance"""
     current_prices = {}
@@ -145,7 +143,6 @@ def get_current_prices(symbols):
             current_prices[symbol] = None
     
     return current_prices
-
 
 def calculate_unrealized_pnl(sell_results, current_prices):
     """Calculate unrealized profits/losses if sold at current prices"""
@@ -187,7 +184,6 @@ def calculate_unrealized_pnl(sell_results, current_prices):
             result['unrealized_pnl_pct'] = None
             result['opportunity_difference'] = None
 
-
 def create_analysis_dataframe(sell_results):
     """Create DataFrame with sell transaction analysis"""
     df_sell_analysis = pd.DataFrame(sell_results)
@@ -207,7 +203,6 @@ def create_analysis_dataframe(sell_results):
     df_sell_analysis = df_sell_analysis[column_order]
     
     return df_sell_analysis
-
 
 def generate_summary_statistics(df_sell_analysis):
     """Generate summary statistics from the analysis"""
@@ -242,7 +237,6 @@ def generate_summary_statistics(df_sell_analysis):
     
     return summary
 
-
 def generate_symbol_summary(df_sell_analysis):
     """Generate detailed breakdown by symbol"""
     symbol_summary = df_sell_analysis.groupby('symbol').agg({
@@ -261,14 +255,12 @@ def generate_symbol_summary(df_sell_analysis):
     
     return symbol_summary
 
-
 def save_as_excel(df_sell_analysis, symbol_summary, output_path):
     """Save analysis results to Excel file"""
     with pd.ExcelWriter(output_path, engine='openpyxl') as writer:
         df_sell_analysis.to_excel(writer, sheet_name='Sell Transactions', index=False)
         symbol_summary.to_excel(writer, sheet_name='Symbol Summary')
     print(f"\n💾 Excel file saved to: {output_path}")
-
 
 def save_as_markdown(df_sell_analysis, summary, symbol_summary, output_path):
     """Save analysis results to Markdown file"""
@@ -365,7 +357,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     
     # Save results based on format
-    update_date = datetime.strptime(portfolio_json["updated_at"], "%d-%m-%Y").strftime("%m-%d-%Y")
+    update_date = datetime.strptime(portfolio_json["updated_at"], "%d-%m-%Y").strftime("%Y-%m-%d")
     
     if args.format == 'excel':
         output_file_name = f"Sell_Transaction_Analysis_{update_date}.xlsx"

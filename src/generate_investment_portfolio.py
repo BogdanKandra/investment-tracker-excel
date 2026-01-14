@@ -585,10 +585,11 @@ def create_investment_portfolio_template(portfolio_json_path):
         
         # Save the workbook
         print("\n💾 Saving Excel file...")
-        # take the updated_at date and format it to %m-%d-%Y
+        # format the updated_at date to %Y-%m-%d
         updated_at = portfolio_data['updated_at']
         updated_at = datetime.strptime(updated_at, "%d-%m-%Y").strftime("%Y-%m-%d")
         workbook_name = f"Investment_Portfolio_{updated_at}.xlsx"
+        PORTFOLIOS_PATH.mkdir(parents=True, exist_ok=True)
         wb.save(PORTFOLIOS_PATH / workbook_name)
         print(f"✅ Investment portfolio '{workbook_name}' has been created successfully!")
         print(f"📁 Location: {PORTFOLIOS_PATH / workbook_name}")

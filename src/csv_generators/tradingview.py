@@ -1,5 +1,6 @@
 """ Script to generate a CSV file with transactions from portfolio.json formatted for TradingView import. """
 import json
+from datetime import datetime
 from pathlib import Path
 import pandas as pd
 
@@ -46,7 +47,10 @@ def main():
 
     # Create DataFrame and save to CSV
     df = pd.DataFrame(rows)
-    output_path = RESULTS_PATH / f"TradingView_Transactions_{portfolio['updated_at']}.csv"
+    updated_at = portfolio['updated_at']
+    updated_at = datetime.strptime(updated_at, "%d-%m-%Y").strftime("%Y-%m-%d")
+    output_path = RESULTS_PATH / f"TradingView_Transactions_{updated_at}.csv"
+    output_path.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False)
 
     print(f"✅ TradingView transactions CSV file generated successfully!")
