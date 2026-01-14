@@ -1,6 +1,24 @@
-# Investment Portfolio Management Excel Template
+# Investment Portfolio Management System
 
-This project generates a comprehensive Excel template specifically designed for personal investment portfolio management. The template integrates real portfolio data from JSON files and fetches live market data to create dynamic, data-driven investment analysis sheets perfect for tracking, analyzing, and visualizing your investment portfolio performance.
+A comprehensive portfolio management system that generates Excel templates, performs FIFO-based transaction analysis, and exports data to external platforms (TradingView, Yahoo Finance). The system integrates real portfolio data from JSON files with live market data via yfinance API to create dynamic, data-driven investment analysis perfect for tracking, analyzing, and visualizing your investment portfolio performance.
+
+## 🚀 Quick Start
+
+1. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Add Your Portfolio Data**
+   - Edit `data/portfolio.json` with your accounts, transactions, and watchlist
+
+3. **Generate Excel Template**
+   - Open and run `notebooks/generate_portfolio.ipynb` (recommended)
+   - Or run: `python src/generate_investment_portfolio.py`
+
+4. **Analyze Your Portfolio**
+   - Explore data with `notebooks/explore_portfolio.ipynb`
+   - Export to TradingView or Yahoo Finance using the respective notebooks
 
 ## 📊 Investment-Focused Features
 
@@ -35,6 +53,13 @@ Built-in charts and visualizations:
 - **FIFO Accounting**: Proper cost basis calculations for tax reporting
 - **Multi-Account Support**: Track holdings across different brokerage accounts
 
+### 🔄 Export & Analysis Tools
+- **CSV Exporters**: Generate portfolio files for TradingView and Yahoo Finance
+- **Sell Transaction Analysis**: FIFO-based P&L analysis with opportunity cost calculations
+- **Multiple Output Formats**: Excel and Markdown formats for reports
+- **Interactive Notebooks**: 4 Jupyter notebooks for different workflows
+- **Test Mode**: Separate test data file for quick generation, using only two example watchlist items
+
 ## Installation & Usage
 
 1. Install required dependencies:
@@ -45,17 +70,31 @@ pip install -r requirements.txt
 2. Set up your portfolio data:
    - Update `data/portfolio.json` with your actual portfolio transactions
    - Include account information, transactions, and watchlist symbols
+   - Use `data/portfolio_test.json` for testing purposes
 
 3. Generate the investment template:
-```bash
-cd src
-python generate_investment_portfolio.py
-```
+   
+   **Option A: Using Jupyter Notebook (Recommended)**
+   - Open `notebooks/generate_portfolio.ipynb`
+   - Set `TEST_GENERATION = True` to use test data or `False` for real data
+   - Run all cells to generate the Excel file
+   
+   **Option B: Using Command Line**
+   ```bash
+   cd src
+   python generate_investment_portfolio.py
+   # Or for test mode:
+   python generate_investment_portfolio.py --test
+   ```
 
-4. Explore your data:
-   - Use `notebooks/explore_portfolio.ipynb` for profit/loss analysis
-   - Analyze sell transactions with FIFO accounting
-   - Compare realized vs unrealized gains
+4. Explore and analyze your data:
+   - **Portfolio EDA**: Use `notebooks/explore_portfolio.ipynb` for exploratory data analysis
+   - **Sell Transaction Analysis**: Generate profit/loss analysis with FIFO accounting
+   - **Compare Performance**: Analyze realized vs unrealized gains
+
+5. Export to external platforms:
+   - **TradingView**: Use `notebooks/generate_tradingview_csv.ipynb` to create CSV import file
+   - **Yahoo Finance**: Use `notebooks/generate_yfinance_csv.ipynb` to create CSV import file
 
 ## Portfolio Data Structure
 
@@ -165,10 +204,54 @@ The system expects a `portfolio.json` file with the following structure:
 - **Transaction History**: Complete audit trail with fees and dates
 
 ### For Data Analysis
-- **Jupyter Notebook Integration**: Advanced profit/loss analysis
-- **CSV Export**: Further analysis in Excel or other tools
+- **Jupyter Notebook Integration**: Advanced profit/loss analysis with multiple notebooks
+- **CSV Export**: Export to TradingView and Yahoo Finance formats
 - **Real-Time Data**: yfinance integration for live market information
 - **JSON Data Structure**: Easy integration with other financial tools
+- **Multiple Output Formats**: Excel and Markdown formats for sell transaction analysis
+- **Portfolio EDA**: Explore portfolio structure, symbols, accounts, and transaction patterns
+
+## Command-Line Tools
+
+### 1. Generate Excel Portfolio Template
+```bash
+python src/generate_investment_portfolio.py [--test]
+```
+**Options:**
+- `--test`: Use portfolio_test.json instead of portfolio.json
+
+**Output:** Excel file with 6 sheets (Overview, Holdings, Transactions, Dividends, Analysis, Watchlist)
+
+### 2. Sell Transaction Analysis
+```bash
+python src/generate_sell_transaction_analysis.py --format=<format>
+```
+**Options:**
+- `--format=excel`: Generate Excel workbook with detailed P&L analysis
+- `--format=markdown`: Generate Markdown format report
+
+**Output:** FIFO-based profit/loss analysis for all sell transactions
+
+### 3. TradingView CSV Export
+```bash
+python src/csv_generators/tradingview.py
+```
+**Output:** CSV file formatted for TradingView portfolio import
+
+### 4. Yahoo Finance CSV Export
+```bash
+python src/csv_generators/yfinance.py
+```
+**Output:** CSV file formatted for Yahoo Finance portfolio import
+
+## Jupyter Notebooks
+
+All command-line tools are also available through Jupyter notebooks for interactive use:
+
+1. **generate_portfolio.ipynb**: Main workflow for generating Excel template with test mode toggle
+2. **explore_portfolio.ipynb**: Portfolio EDA, sell transaction analysis, and yfinance data exploration
+3. **generate_tradingview_csv.ipynb**: Interactive TradingView CSV generation
+4. **generate_yfinance_csv.ipynb**: Interactive Yahoo Finance CSV generation
 
 ## Customization Options
 
@@ -179,61 +262,18 @@ The template can be easily customized for:
 - **Custom Target Allocations**: Modify target percentages in the Overview sheet
 - **Extended Watchlist**: Add more symbols for research tracking
 - **Alternative Data Sources**: Replace yfinance with other financial APIs
+- **Export Formats**: Customize CSV generators for other platforms
+- **Analysis Formats**: Choose between Excel or Markdown output for sell transaction analysis
 
-## Investment Best Practices
+## Key Technologies
 
-1. **Data Maintenance**: Keep portfolio.json updated with latest transactions
-2. **Regular Analysis**: Run the Jupyter notebook monthly for profit/loss insights
-3. **Currency Monitoring**: Review exchange rate impacts on global portfolio
-4. **Rebalancing**: Use Overview sheet recommendations quarterly
-5. **Tax Planning**: Leverage FIFO calculations for tax-loss harvesting
-6. **Performance Tracking**: Monitor realized vs unrealized gains
+This project is built with:
 
-## File Structure
-```
-├── src/
-│   └── generate_investment_portfolio.py     # Main template generator
-├── data/
-│   └── portfolio.json                      # Your portfolio data (update this!)
-├── notebooks/
-│   └── explore_portfolio.ipynb             # Profit/loss analysis notebook
-├── results/                               # Generated Excel files and analysis
-├── requirements.txt                       # Python dependencies
-└── README.md                             # This documentation
-```
+- **Python 3.x**: Core programming language
+- **openpyxl (3.1.5)**: Excel file generation and formatting
+- **pandas (2.3.2)**: Data manipulation and analysis
+- **yfinance (0.2.65)**: Real-time market data from Yahoo Finance API
+- **requests (2.32.5)**: HTTP requests for currency conversion and API calls
+- **Jupyter Notebooks**: Interactive data exploration and workflow automation
 
-## Investment Metrics Included
-
-- **Real-Time Performance**: Live unrealized gains/losses with FIFO cost basis
-- **Multi-Currency Analytics**: USD and EUR global portfolio views with live exchange rates
-- **Income Analysis**: Dividend tracking with yield calculations and projections
-- **Risk Assessment**: Sector diversification and concentration analysis
-- **Valuation Metrics**: P/E ratios, market cap, 52-week ranges, dividend yields
-- **Opportunity Analysis**: Realized vs unrealized profit/loss comparisons
-
-## Advanced Features
-
-### Real-Time Data Integration
-- **yfinance API**: Live stock prices, company info, fundamentals
-- **Currency Conversion**: Real-time exchange rates for global portfolios
-- **Market Data**: Current prices, 52-week ranges, market cap, P/E ratios
-
-### FIFO Accounting System
-- **Tax Compliance**: Proper cost basis calculations for tax reporting
-- **Sell Analysis**: Detailed profit/loss tracking with opportunity cost analysis
-- **Multi-Account**: Consolidated FIFO calculations across all accounts
-
-### Jupyter Notebook Analytics
-- **Profit/Loss Analysis**: Compare realized vs unrealized gains on all sell transactions
-- **Opportunity Cost**: Analyze whether you sold too early or at the right time
-- **CSV Export**: Export analysis results for further processing
-
-## Support for Investment Decisions
-
-This comprehensive system provides:
-- **Data-Driven Decisions**: Real-time market data for informed choices
-- **Tax-Efficient Trading**: FIFO tracking for optimal tax planning
-- **Global Portfolio Management**: Multi-currency, multi-account consolidation
-- **Performance Attribution**: Understand what drives your returns
-- **Risk Management**: Sector allocation and concentration monitoring
-- **Research Integration**: Watchlist with live fundamentals for new investments
+All dependencies are managed via `requirements.txt` for easy installation.
